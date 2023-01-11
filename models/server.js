@@ -1,5 +1,6 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
+const {dbConnection}=require('../DB/config.db')
 
 
 class Server {
@@ -9,6 +10,10 @@ class Server {
         this.port = process.env.PORT;
 
         this.usuariosPath = '/api/usuarios';
+        this.tiendaPath = '/api/tienda';
+        this.contadorPath = '/api/contadores';
+
+        this.conectarDB();
 
         //Middlewares
        // this.app.use(express.static(__dirname + '/public'))
@@ -18,6 +23,10 @@ class Server {
         //rutas de aplicacion
 
         this.routes();
+    }
+
+    async conectarDB(){
+        await dbConnection();
     }
 
     middlewares(){
@@ -37,6 +46,8 @@ class Server {
 
         
       this.app.use(this.usuariosPath, require('../routes/user.routes'))
+      this.app.use(this.tiendaPath, require('../routes/tienda.routes'))
+      this.app.use(this.contadorPath, require('../routes/contadores.routes'))
 
     }
 
